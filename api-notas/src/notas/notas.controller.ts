@@ -33,7 +33,7 @@ export class NotasController {
     findAll() {
         return this.notasService.findAll();
     }
-
+    //difícil ya que el UUID es un número muy largo
     @Get(':id')
     @ApiOperation({ summary: 'Obtener nota por ID' })
     @ApiParam({ name: 'id', description: 'UUID de la nota', format: 'uuid' })
