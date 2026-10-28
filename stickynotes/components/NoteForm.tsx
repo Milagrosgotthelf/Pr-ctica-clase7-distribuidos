@@ -2,6 +2,7 @@
 
 import React from "react";
 import { COLORES_NOTAS } from "../types/note";
+import { useTheme, Theme } from "@/app/contexts/ThemeContext";
 
 interface NoteFormProps {
   title: string;
@@ -30,10 +31,17 @@ export default function NoteForm({
   onCancelEdit,
   onSubmit,
 }: NoteFormProps) {
+  const { theme } = useTheme();
+  const isDark = theme === Theme.DARK;
+
+  const inputClasses = `border p-2 rounded focus:outline-none focus:ring-2 focus:ring-pink-200 transition-colors ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-black placeholder-gray-500"
+    }`;
+
   return (
     <form
       onSubmit={onSubmit}
-      className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md mb-10"
+      className={`max-w-xl mx-auto p-6 rounded-lg shadow-md mb-10 transition-colors duration-300 ${isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+        }`}
     >
       <h2 className="text-xl font-semibold mb-4">
         {editingID ? "Editar Nota" : "Crear Nueva Nota"}
@@ -45,7 +53,7 @@ export default function NoteForm({
           placeholder="Título de la nota"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-pink-200"
+          className={inputClasses}
           required
         />
 
@@ -53,7 +61,7 @@ export default function NoteForm({
           placeholder="Escribe tu recordatorio aquí..."
           value={contenido}
           onChange={(e) => setContenido(e.target.value)}
-          className="border p-2 rounded resize-none h-24 focus:outline-none focus:ring-2 focus:ring-pink-200"
+          className={`${inputClasses} resize-none h-24`}
           required
         />
 
@@ -65,7 +73,7 @@ export default function NoteForm({
             onChange={(e) =>
               setMinutosdevalidez(e.target.value === "" ? "" : Number(e.target.value))
             }
-            className="border p-2 rounded w-44 focus:outline-none focus:ring-2 focus:ring-pink-200"
+            className={`${inputClasses} w-44`}
             min="1"
             required
           />
@@ -77,11 +85,10 @@ export default function NoteForm({
                 key={c}
                 type="button"
                 onClick={() => setColor(c)}
-                className={`w-8 h-8 rounded-full border-2 cursor-pointer transition-all ${
-                  color === c
-                    ? "border-gray-600 shadow-md scale-110"
-                    : "border-gray-300 opacity-80 hover:opacity-100"
-                }`}
+                className={`w-8 h-8 rounded-full border-2 cursor-pointer transition-all ${color === c
+                  ? "border-gray-500 shadow-md scale-110"
+                  : "border-transparent opacity-80 hover:opacity-100"
+                  }`}
                 style={{ backgroundColor: c }}
                 aria-label={`Seleccionar color ${c}`}
                 aria-pressed={color === c}
@@ -93,7 +100,7 @@ export default function NoteForm({
         <div className="flex gap-2 mt-2">
           <button
             type="submit"
-            className="bg-pink-300 text-black px-4 py-2 rounded hover:bg-pink-400 transition cursor-pointer"
+            className="bg-pink-300 text-black px-4 py-2 rounded hover:bg-pink-400 transition cursor-pointer font-medium"
           >
             {editingID ? "Guardar Cambios" : "Agregar Nota"}
           </button>
@@ -102,7 +109,8 @@ export default function NoteForm({
             <button
               type="button"
               onClick={onCancelEdit}
-              className="bg-purple-300 text-gray-800 px-4 py-2 rounded hover:bg-purple-400 transition cursor-pointer"
+              className={`px-4 py-2 rounded transition cursor-pointer font-medium ${isDark ? "bg-gray-600 text-white hover:bg-gray-500" : "bg-purple-200 text-gray-800 hover:bg-purple-300"
+                }`}
             >
               Cancelar
             </button>
